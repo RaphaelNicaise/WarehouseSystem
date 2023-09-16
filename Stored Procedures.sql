@@ -43,3 +43,37 @@ CREATE PROCEDURE get_categories ()
 BEGIN
 	SELECT * FROM categories;
 END //
+
+DELIMITER //
+CREATE PROCEDURE create_product (IN product_name varchar(255),IN description varchar(255),
+    IN price decimal(10,2),IN id_supplier INT,IN id_category varchar(5))
+BEGIN
+	
+	DECLARE supplier_exists INT;
+    DECLARE category_exists INT;
+
+    
+    SELECT COUNT(*) INTO supplier_exists FROM suppliers WHERE id_supplier = id_supplier;
+    SELECT COUNT(*) INTO category_exists FROM categories WHERE id_category = id_category;
+
+    IF supplier_exists > 0 AND category_exists > 0 THEN
+        
+        INSERT INTO products (product_name, description, price, id_supplier, id_category)
+        VALUES (product_name, description, price, id_supplier, id_category);
+        SET @last_product_id = LAST_INSERT_ID();
+        
+        INSERT INTO inventory (id_product) VALUES (@last_product_id);
+        
+        SELECT CONCAT(product_name, ' was added successfully!') as Message;
+    ELSE
+        SELECT CONCAT('The id_supplier: ', id_supplier, ' or id_category: ', id_category, ' doesn`t exist') as Message;
+    END IF;
+	
+END //
+
+DELIMITER // 
+CREATE PROCEDURE add_stock (IN id_product INT,IN quantity INT)
+BEGIN
+	UPDATE inventory
+END // 
+-- AGREGAR  

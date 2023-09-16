@@ -54,3 +54,9 @@ CREATE TABLE stock_movements (
     PRIMARY KEY (id_movement),
     FOREIGN KEY (id_product) REFERENCES products (id_product)
 );
+
+/* CREATE TABLE sectors-categorys (
+	sector ENUM('A', 'B', 'C', 'D', 'E', 'F') NULL,
+    id_category INT NOT NULL,
+    FOREIGN KEY id_category REFERENCES categories (id_cateogory)
+); */ 
