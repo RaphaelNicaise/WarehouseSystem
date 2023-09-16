@@ -20,4 +20,3 @@ BEGIN
     
 END //
 
-drop trigger ins_outs_stock
