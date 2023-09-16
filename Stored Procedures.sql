@@ -7,7 +7,7 @@ BEGIN
 END //
 
 DELIMITER //
-CREATE PROCEDURE get_suppliers (IN id_supplier CHAR(1))
+CREATE PROCEDURE get_suppliers (IN id_supplier CHAR(4000))
 BEGIN
 	declare clausula varchar(255);
     declare supplierQuery varchar(255);
@@ -15,8 +15,8 @@ BEGIN
 	IF id_supplier like '' THEN
         SET supplierQuery = '';
 	ELSE
-		SET supplierQuery = concat('WHERE id_supplier= ',id_supplier);
-	END IF;
+		SET supplierQuery = concat('WHERE id_supplier like ',id_supplier);
+	END IF; 	 
     
     SET @clausula = concat('SELECT * FROM suppliers ',supplierQuery);
     
@@ -32,16 +32,15 @@ BEGIN
 END //
 
 DELIMITER //
-CREATE PROCEDURE add_category (IN id_category varchar(5),IN category varchar(255))
+CREATE PROCEDURE add_category (IN category varchar(255))
 BEGIN
-	INSERT INTO categories (id_category,category) VALUES (id_category,category); 
-    SELECT concat('The category ',id_category,' -> ',category,' was added correctly.') AS Message;
+	INSERT INTO categories (category) VALUES (category); 
 END //
 
 DELIMITER //
 CREATE PROCEDURE get_categories ()
 BEGIN
-	SELECT * FROM categories;
+	SELECT * FROM categories order by id_category;
 END //
 
 DELIMITER //
@@ -71,9 +70,23 @@ BEGIN
 	
 END //
 
-DELIMITER // 
-CREATE PROCEDURE add_stock (IN id_product INT,IN quantity INT)
+DELIMITER //
+
+CREATE PROCEDURE add_stock(IN id_product INT, IN in_quantity INT)
 BEGIN
-	UPDATE inventory
-END // 
--- AGREGAR  
+    
+    DECLARE product_count INT;
+    DECLARE inventory_count INT;
+    
+    SELECT COUNT(*) INTO product_count FROM products WHERE id_product = id_product;
+	
+    IF product_count > 0 THEN
+        
+        UPDATE inventory SET quantity = quantity + in_quantity WHERE id_product = id_product;
+       
+        UPDATE inventory SET last_movement = NOW() WHERE id_product = id_product;
+        SELECT CONCAT(in_quantity, ' units added to product with id ', id_product, ' successfully.');
+    ELSE
+        SELECT 'Product does not exist.';
+    END IF;
+END //
