@@ -7,7 +7,7 @@ BEGIN
 END //
 
 DELIMITER //
-CREATE PROCEDURE get_suppliers (IN id_supplier CHAR(4000))
+CREATE PROCEDURE get_suppliers (IN id_supplier CHAR(4))
 BEGIN
 	declare clausula varchar(255);
     declare supplierQuery varchar(255);
@@ -44,8 +44,9 @@ BEGIN
 END //
 
 DELIMITER //
+
 CREATE PROCEDURE create_product (IN product_name varchar(255),IN description varchar(255),
-    IN price decimal(10,2),IN id_supplier INT,IN id_category varchar(5))
+    IN price decimal(10,2),IN id_supplier INT,IN id_category INT)
 BEGIN
 	
 	DECLARE supplier_exists INT;
@@ -63,7 +64,7 @@ BEGIN
         
         INSERT INTO inventory (id_product) VALUES (@last_product_id);
         
-        SELECT CONCAT(product_name, ' was added successfully!') as Message;
+        SELECT CONCAT(product_name,' ',description, ' was added successfully!') as Message;
     ELSE
         SELECT CONCAT('The id_supplier: ', id_supplier, ' or id_category: ', id_category, ' doesn`t exist') as Message;
     END IF;
@@ -72,21 +73,44 @@ END //
 
 DELIMITER //
 
-CREATE PROCEDURE add_stock(IN id_product INT, IN in_quantity INT)
+CREATE PROCEDURE add_stock(IN p_id_product INT, IN p_in_quantity INT)
 BEGIN
-    
     DECLARE product_count INT;
-    DECLARE inventory_count INT;
     
-    SELECT COUNT(*) INTO product_count FROM products WHERE id_product = id_product;
+    SELECT COUNT(*) INTO product_count FROM products WHERE id_product = p_id_product;
 	
     IF product_count > 0 THEN
-        
-        UPDATE inventory SET quantity = quantity + in_quantity WHERE id_product = id_product;
-       
-        UPDATE inventory SET last_movement = NOW() WHERE id_product = id_product;
-        SELECT CONCAT(in_quantity, ' units added to product with id ', id_product, ' successfully.');
+        IF p_in_quantity > 0 THEN
+            
+            UPDATE inventory SET quantity = quantity + p_in_quantity, last_movement = NOW() WHERE id_product = p_id_product;
+            SELECT CONCAT(p_in_quantity, ' units added to id_product ', p_id_product, ' succesfuly.') AS 'Message';
+        ELSEIF p_in_quantity < 0 THEN 
+            
+            UPDATE inventory SET quantity = quantity + p_in_quantity, last_movement = NOW() WHERE id_product = p_id_product;
+            SELECT CONCAT(-p_in_quantity, ' units deleted to id_product', p_id_product, ' succesfuly.') AS 'Message';
+        ELSE
+            SELECT ('You didn`t added/remove any unit');
+        END IF;
     ELSE
-        SELECT 'Product does not exist.';
+        SELECT 'Product doesn`t exists.';
     END IF;
+END //
+
+DELIMITER //
+CREATE PROCEDURE get_products(IN id_product char(5))
+BEGIN	
+    declare clausula varchar(255);
+    declare productsQuery varchar(255);
+    
+	IF id_product like '' THEN
+        SET productsQuery = '';
+	ELSE
+		SET productsQuery = concat('WHERE id_product like "',id_product,'"');
+	END IF; 	 
+    
+    SET @clausula = concat('SELECT * FROM products ',productsQuery);
+    
+	PREPARE runSQL FROM @clausula;
+    EXECUTE runSQL;
+    DEALLOCATE PREPARE runSQL;
 END //
