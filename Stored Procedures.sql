@@ -77,6 +77,14 @@ CREATE PROCEDURE add_stock(IN p_id_product INT, IN p_in_quantity INT)
 BEGIN
     DECLARE product_count INT;
     
+    DECLARE EXIT HANDLER FOR 4025
+    BEGIN
+	ROLLBACK;
+    SELECT 'You cannot remove this amount of products.';
+    END;
+    
+    
+    START TRANSACTION;
     SELECT COUNT(*) INTO product_count FROM products WHERE id_product = p_id_product;
 	
     IF product_count > 0 THEN
@@ -94,6 +102,7 @@ BEGIN
     ELSE
         SELECT 'Product doesn`t exists.';
     END IF;
+    COMMIT;
 END //
 
 DELIMITER //
