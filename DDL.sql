@@ -37,7 +37,7 @@
 	CREATE TABLE inventory (
 		id_inventory INT AUTO_INCREMENT NOT NULL,
 		id_product INT NOT NULL UNIQUE,
-		quantity INT DEFAULT 0,
+		quantity INT DEFAULT 0 CHECK (quantity >= 0),
 		last_movement TIMESTAMP DEFAULT NOW(),
 		sector ENUM('A', 'B', 'C', 'D', 'E', 'F') NULL,
 		PRIMARY KEY (id_inventory),

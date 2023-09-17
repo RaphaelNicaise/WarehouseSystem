@@ -1,0 +1,7 @@
+DELIMITER //
+CREATE FUNCTION distinct_products_quantity ()
+RETURNS INT READS SQL DATA
+BEGIN
+	RETURN(SELECT COUNT(*) AS Quantity FROM products);
+END //
+

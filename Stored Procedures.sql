@@ -114,3 +114,9 @@ BEGIN
     EXECUTE runSQL;
     DEALLOCATE PREPARE runSQL;
 END //
+
+DELIMITER //
+CREATE PROCEDURE stock_movements_of_id(IN _id_product INT)
+BEGIN
+	SELECT * FROM stock_movements where id_product = _id_product;
+END //
