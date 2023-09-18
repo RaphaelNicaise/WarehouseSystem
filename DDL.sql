@@ -1,4 +1,4 @@
-	DROP SCHEMA IF EXISTS WarehouseSystem;
+DROP SCHEMA IF EXISTS WarehouseSystem;
 
 	CREATE SCHEMA WarehouseSystem;
 	USE WarehouseSystem;
@@ -27,7 +27,7 @@
 		description varchar(255),
 		price DECIMAL(10,2),
 		id_supplier INT NOT NULL,
-		id_category INT NOT NULL,
+		id_category INT DEFAULT NULL,
 		PRIMARY KEY (id_product),
 		FOREIGN KEY (id_supplier) REFERENCES suppliers (id_supplier),
 		FOREIGN KEY (id_category) REFERENCES categories (id_category)
@@ -55,20 +55,11 @@
 		FOREIGN KEY (id_product) REFERENCES products (id_product)
 	);
 
-INSERT INTO categories (category) VALUES ('Chips'),
-	('Sodas'),
-    ('Beer'),
-    ('Vodkas');
-    
-INSERT INTO suppliers (name,phone_number,email,direction,information)
-VALUES ('Endrick Shepard S.A','+48 922 345','EndrickSupply@hotmail.com','McNeil Av 51 16',null),
-	   ('The Suppliers Company','+54 291 712-4545','Supplying@no-reply.com','Omaha 5151','The best`s Suppliers of Arizona'),
-       ('Big Time Sup','+11 51 425331','aYmacarena123@gmail.us','Silver Avenue 631', NULL);
-       
-
-
 	/* CREATE TABLE sectors-categorys (
 		sector ENUM('A', 'B', 'C', 'D', 'E', 'F') NULL,
 		id_category INT NOT NULL,
 		FOREIGN KEY id_category REFERENCES categories (id_cateogory)
 	); */ 
+
+
+

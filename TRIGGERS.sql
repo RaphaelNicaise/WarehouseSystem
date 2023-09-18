@@ -20,3 +20,13 @@ BEGIN
     
 END //
 
+DELIMITER //
+
+CREATE TRIGGER insert_product_into_inventory
+AFTER INSERT ON products
+FOR EACH ROW
+BEGIN
+    INSERT INTO inventory (id_product, quantity)
+    VALUES (NEW.id_product, 0);
+END //
+

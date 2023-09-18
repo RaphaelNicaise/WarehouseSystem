@@ -80,7 +80,8 @@ BEGIN
     DECLARE EXIT HANDLER FOR 4025
     BEGIN
 	ROLLBACK;
-    SELECT 'You cannot remove this amount of products.';
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'You cannot remove this amount of products.';
     END;
     
     
