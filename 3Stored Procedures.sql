@@ -45,7 +45,7 @@ END //
 
 DELIMITER //
 
-CREATE PROCEDURE create_product (IN product_name varchar(255),IN description varchar(255),
+CREATE  PROCEDURE create_product (IN product_name varchar(255),IN description varchar(255),
     IN price decimal(10,2),IN id_supplier INT,IN id_category INT)
 BEGIN
 	
@@ -60,10 +60,7 @@ BEGIN
         
         INSERT INTO products (product_name, description, price, id_supplier, id_category)
         VALUES (product_name, description, price, id_supplier, id_category);
-        SET @last_product_id = LAST_INSERT_ID();
-        
-        INSERT INTO inventory (id_product) VALUES (@last_product_id);
-        
+		
         SELECT CONCAT(product_name,' ',description, ' was added successfully!') as Message;
     ELSE
         SELECT CONCAT('The id_supplier: ', id_supplier, ' or id_category: ', id_category, ' doesn`t exist') as Message;
@@ -130,3 +127,4 @@ CREATE PROCEDURE stock_movements_of_id(IN _id_product INT)
 BEGIN
 	SELECT * FROM stock_movements where id_product = _id_product;
 END //
+
