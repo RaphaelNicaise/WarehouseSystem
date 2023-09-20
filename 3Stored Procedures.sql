@@ -128,3 +128,13 @@ BEGIN
 	SELECT * FROM stock_movements where id_product = _id_product;
 END //
 
+DELIMITER //
+CREATE PROCEDURE change_price (IN id_product_ INT,IN new_price DECIMAL(10,2))
+BEGIN
+	IF new_price >= 0 THEN
+		UPDATE products set price = new_price where id_product = id_product_;
+	ELSE
+		SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'You cant set that price.';
+	END IF;
+END //

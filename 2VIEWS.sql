@@ -19,3 +19,15 @@ CREATE OR REPLACE VIEW products_info AS (
 						 JOIN inventory inv on inv.id_product = pr.id_product
 		ORDER BY ID_P
 );
+
+CREATE OR REPLACE VIEW products_per_cateogry AS (
+SELECT c.category,count(id_product) as Quantity 
+from categories c right join products p on c.id_category = p.id_category
+group by c.category order by count(id_product) desc
+);
+
+CREATE OR REPLACE VIEW amount_products_per_cateogry AS(
+SELECT c.category,sum(i.quantity) as Quantity  
+from categories c right join products p on c.id_category = p.id_category
+join inventory i on i.id_product = p.id_product
+group by (c.category) order by Quantity desc);
