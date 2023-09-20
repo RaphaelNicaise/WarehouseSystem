@@ -56,12 +56,24 @@ DROP SCHEMA IF EXISTS WarehouseSystem;
 		PRIMARY KEY (id_movement),
 		FOREIGN KEY (id_product) REFERENCES products (id_product)
 	);
+    
+CREATE TABLE price_changes (
+	id_movement INT auto_increment NOT NULL,
+    id_product INT NOT NULL,
+    old_price decimal (10,2) NOT NULL,
+    new_price decimal (10,2) NOT NULL,
+    movement_date TIMESTAMP DEFAULT NOW(), 
+    
+    PRIMARY KEY (id_movement),
+    FOREIGN KEY (id_product) REFERENCES products (id_product)
+)
+
+
 
 	/* CREATE TABLE sectors-categorys (
 		sector ENUM('A', 'B', 'C', 'D', 'E', 'F') NULL,
 		id_category INT NOT NULL,
 		FOREIGN KEY id_category REFERENCES categories (id_cateogory)
 	); */ 
-
 
 

@@ -30,3 +30,14 @@ BEGIN
     VALUES (NEW.id_product, 0);
 END //
 
+DELIMITER //
+
+CREATE TRIGGER update_price_of_product
+AFTER UPDATE ON products
+FOR EACH ROW
+BEGIN
+	IF OLD.price <> NEW.price THEN
+		INSERT INTO price_changes (id_product,old_price,new_price)
+		VALUES (new.id_product,OLD.price,NEW.price);
+	END IF;
+END //
