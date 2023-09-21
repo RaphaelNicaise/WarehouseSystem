@@ -9,12 +9,12 @@ BEGIN
     SET quantity_change = NEW.quantity - OLD.quantity;
 	IF OLD.quantity != NEW.quantity THEN
 		IF quantity_change > 0 THEN
-			INSERT INTO stock_movements (id_product, type, quantity,old_quantity)
-			VALUES (OLD.id_product, 'ins', quantity_change,OLD.quantity);
+			INSERT INTO stock_movements (id_product,old_quantity, quantity,type,new_quantity)
+			VALUES (OLD.id_product,OLD.quantity, quantity_change,'ins',NEW.quantity);
 			
 		ELSEIF quantity_change < 0 THEN
-			INSERT INTO stock_movements (id_product, type, quantity,old_quantity)
-			VALUES (OLD.id_product, 'outs', -quantity_change,OLD.quantity);
+			INSERT INTO stock_movements (id_product,old_quantity, quantity,type,new_quantity)
+			VALUES (OLD.id_product,OLD.quantity, -quantity_change,'outs',NEW.quantity);
 		END IF;
 	END IF;
     
@@ -41,3 +41,5 @@ BEGIN
 		VALUES (new.id_product,OLD.price,NEW.price);
 	END IF;
 END //
+
+drop trigger ins_outs_stock

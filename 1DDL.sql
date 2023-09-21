@@ -48,9 +48,10 @@ DROP SCHEMA IF EXISTS WarehouseSystem;
 	CREATE TABLE stock_movements (
 		id_movement INT AUTO_INCREMENT NOT NULL,
 		id_product INT NOT NULL,
-		type ENUM('ins','outs'),
-		quantity INT NOT NULL,
-        old_quantity INT NOT NULL,
+		old_quantity INT NOT NULL,
+        quantity INT NOT NULL,
+        type ENUM('ins','outs'),
+        new_quantity INT NOT NULL,
 		movement_date TIMESTAMP DEFAULT NOW(),
         
 		PRIMARY KEY (id_movement),

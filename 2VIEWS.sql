@@ -31,3 +31,16 @@ SELECT c.category,sum(i.quantity) as Quantity
 from categories c right join products p on c.id_category = p.id_category
 join inventory i on i.id_product = p.id_product
 group by (c.category) order by Quantity desc);
+
+CREATE OR REPLACE VIEW top_movements_out_per_product AS (
+select sm.id_product,p.product_name,count(*) as QuantityMovements from stock_movements sm
+right join products p on p.id_product = sm.id_product
+where sm.type like 'outs' group by id_product
+order by sum(quantity) desc);
+
+CREATE OR REPLACE VIEW top_movements_ins_per_product AS (
+select sm.id_product,p.product_name,count(*) as QuantityMovements from stock_movements sm
+right join products p on p.id_product = sm.id_product
+where sm.type like 'ins' group by id_product
+order by sum(quantity) desc);
+
